@@ -17,6 +17,7 @@ exports.register = async (req, res) => {
     const token = generateToken(user._id);
     res.status(201).json({ success: true, token, user });
   } catch (err) {
+    console.error("Registration Error:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
