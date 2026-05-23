@@ -8,8 +8,17 @@ export const useSocket = (onRaceStarted, onRaceResult) => {
   handlers.current = { onRaceStarted, onRaceResult };
 
   useEffect(() => {
-    const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
-    socket = io(SOCKET_URL, { transports: ['websocket'] });
+    const getSocketUrl = () => {
+      if (import.meta.env.VITE_SOCKET_URL) return import.meta.env.VITE_SOCKET_URL;
+      if (window.location.hostname === 'localhost') return 'http://localhost:5000';
+      return '/_/backend';
+    };
+
+    const SOCKET_URL = getSocketUrl();
+    socket = io(SOCKET_URL, { 
+      transports: ['websocket'],
+      ...(window.location.hostname !== 'localhost' && { path: '/_/backend/socket.io' })
+    });
 
     socket.on('race_started', (data) => handlers.current.onRaceStarted?.(data));
     socket.on('race_result', (data) => handlers.current.onRaceResult?.(data));
