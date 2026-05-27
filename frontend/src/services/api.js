@@ -3,7 +3,7 @@ import axios from 'axios';
 const getBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
   if (window.location.hostname === 'localhost') return 'http://localhost:5000/api';
-  return '/_/backend/api';
+  return '/api';
 };
 
 const API = axios.create({

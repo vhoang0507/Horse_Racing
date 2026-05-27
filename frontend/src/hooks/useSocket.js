@@ -11,13 +11,12 @@ export const useSocket = (onRaceStarted, onRaceResult) => {
     const getSocketUrl = () => {
       if (import.meta.env.VITE_SOCKET_URL) return import.meta.env.VITE_SOCKET_URL;
       if (window.location.hostname === 'localhost') return 'http://localhost:5000';
-      return '/_/backend';
+      return '/';
     };
 
     const SOCKET_URL = getSocketUrl();
     socket = io(SOCKET_URL, { 
-      transports: ['websocket'],
-      ...(window.location.hostname !== 'localhost' && { path: '/_/backend/socket.io' })
+      transports: ['websocket']
     });
 
     socket.on('race_started', (data) => handlers.current.onRaceStarted?.(data));
